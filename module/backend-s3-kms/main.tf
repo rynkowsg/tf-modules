@@ -105,7 +105,7 @@ resource "aws_kms_alias" "terraform_state" {
 # Enable server-side encryption by default
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_server_side_encryption_configuration
 resource "aws_s3_bucket_server_side_encryption_configuration" "terraform_state" {
-  bucket = aws_s3_bucket.terraform_state.id
+  bucket     = aws_s3_bucket.terraform_state.id
   depends_on = [aws_kms_key.terraform_state]
 
   rule {
