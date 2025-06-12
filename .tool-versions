@@ -2,7 +2,7 @@
 babashka 1.12.200
 
 # https://github.com/bridgecrewio/checkov/releases
-checkov 3.2.440@3.13.4
+checkov 3.2.441@3.13.4
 
 # https://github.com/hashicorp/terraform/releases
 terraform 1.12.2
