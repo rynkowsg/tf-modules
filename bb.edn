@@ -1,0 +1,5 @@
+{:tasks
+ {format (shell "terraform fmt -recursive")
+  format:check (shell "terraform fmt -recursive -diff -check")
+  lint (shell "checkov --directory .")}
+ #_:tasks}

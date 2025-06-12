@@ -1,0 +1,10 @@
+# JetBrains IDEs
+/.idea/*
+!/.idea/codeStyles/
+!/.idea/dictionaries/
+!/.idea/repl-commands.xml
+!/.idea/runConfigurations/
+*.iml
+
+# Terraform
+.terraform
