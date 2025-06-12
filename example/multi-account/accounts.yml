@@ -1,0 +1,64 @@
+# ====================================================
+# File listing all accounts & OUs in the organization
+# ====================================================
+
+# --------
+#  SCHEMA
+# --------
+#
+# There are two types of accounts: "account" & "ou".
+#
+# Properties of "account" type:
+#  - name
+#  - type
+#  - email
+#
+# Properties of "ou" type:
+#  - name
+#  - type
+#  - children (optional)
+
+# -------------------------------
+#  IMPORTANT FOR RUNNING EXAMPLE
+# -------------------------------
+#
+#  Before you run this example do the following:
+#
+#  1. Change emails
+#
+#  2. Consider commenting out some of the accounts
+#
+#     No account can be detached from organization nor destroyed unless payment
+#     details are provided. It means, nore accounts you create, more you need to
+#     visit to set default payment method. Handy url to fill it in:
+#     https://us-east-1.console.aws.amazon.com/billing/home?region=eu-north-1#/paymentpreferences/paymentmethods
+#
+
+root:
+  account_alias: "example-250612"
+  children:
+    - name: "shared"
+      type: "ou"
+      children:
+        - name: "identity"
+          type: "account"
+          email: "example+identity-250612@example.com"
+
+        - name: "security"
+          type: "account"
+          email: "example+security-250612@example.com"
+
+        - name: "tfstate"
+          type: "account"
+          email: "example+state-250612@example.com"
+
+    - name: "workloads"
+      type: "ou"
+      children:
+        - name: "prod"
+          type: "account"
+          email: "example+prod-250612@example.com"
+
+        - name: "dev"
+          type: "account"
+          email: "example+dev-250612@example.com"
