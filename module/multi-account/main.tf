@@ -1,9 +1,11 @@
+data "aws_organizations_organization" "this" {}
+
 # ------------------------------------------------------------------------------
 # OUs and accounts
 # ------------------------------------------------------------------------------
 
 locals {
-  root_id      = var.aws_root_id
+  root_id      = data.aws_organizations_organization.this.roots[0].id
   accounts_yml = yamldecode(file(var.accounts_yaml_path))
 }
 

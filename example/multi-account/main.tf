@@ -14,12 +14,9 @@ locals {
   accounts_yaml_path = abspath("${path.module}/accounts.yml")
 }
 
-data "aws_organizations_organization" "this" {}
-
 module "multi_account" {
   source             = "../../module/multi-account"
   accounts_yaml_path = local.accounts_yaml_path
-  aws_root_id        = data.aws_organizations_organization.this.roots[0].id
 }
 
 # account map
