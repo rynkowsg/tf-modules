@@ -61,6 +61,34 @@ resource "aws_s3_bucket_public_access_block" "terraform_state" {
 # BUCKET ENCRYPTION
 # ------------------------------------------------------------------------------
 
+locals {
+  root_statement = {
+    Sid    = "AllowRootAccount"
+    Effect = "Allow"
+    Principal = {
+      AWS = "arn:aws:iam::${var.aws_account_id}:root"
+    }
+    Action   = "kms:*"
+    Resource = "*"
+  }
+  admin_statement = length(var.admin_principal_arns) > 0 ? {
+    Sid    = "AllowAdministratorsGroupViaRole"
+    Effect = "Allow"
+    Principal = {
+      AWS = var.admin_principal_arns
+    }
+    Action = [
+      "kms:Encrypt",
+      "kms:Decrypt",
+      "kms:ReEncrypt*",
+      "kms:GenerateDataKey*",
+      "kms:DescribeKey"
+    ]
+    Resource = "*"
+  } : null
+  policy_statements = concat([local.root_statement], local.admin_statement != null ? [local.admin_statement] : [])
+}
+
 resource "aws_kms_key" "terraform_state" {
   description             = "KMS key for encrypting Terraform state"
   tags                    = var.tags
@@ -68,34 +96,9 @@ resource "aws_kms_key" "terraform_state" {
   enable_key_rotation     = true
 
   policy = jsonencode({
-    Version = "2012-10-17",
-    Id      = "default",
-    Statement = [
-      {
-        Sid    = "AllowRootAccount",
-        Effect = "Allow",
-        Principal = {
-          AWS = "arn:aws:iam::${var.aws_account_id}:root"
-        },
-        Action   = "kms:*",
-        Resource = "*"
-      },
-      {
-        Sid    = "AllowAdministratorsGroupViaRole",
-        Effect = "Allow",
-        Principal = {
-          AWS = var.admin_principal_arns
-        },
-        Action = [
-          "kms:Encrypt",
-          "kms:Decrypt",
-          "kms:ReEncrypt*",
-          "kms:GenerateDataKey*",
-          "kms:DescribeKey"
-        ],
-        Resource = "*"
-      }
-    ]
+    Version   = "2012-10-17",
+    Id        = "default",
+    Statement = local.policy_statements,
   })
 }
 
