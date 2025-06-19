@@ -1,8 +1,9 @@
 locals {
-  label_extras_default = ["terraform", "state"]
-  label_extras_final   = length(var.label_extras) != 0 ? var.label_extras : local.label_extras_default
-  bucket_name          = join("-", compact(concat([var.label_namespace, var.label_region, var.label_stage, var.label_name], local.label_extras_final)))
-  kms_key_name         = "${local.bucket_name}-key"
+  label_parts_except_extras = [var.label_namespace, var.label_region, var.label_stage, var.label_name]
+  label_composed            = join("-", compact(concat(local.label_parts_except_extras, var.label_extras)))
+  label_composed_or_default = length(local.label_composed) > 0 ? local.label_composed : "terraform-state"
+  label_final               = coalesce(var.label_full, local.label_composed_or_default)
+  bucket_name               = local.label_final
 }
 
 # ------------------------------------------------------------------------------

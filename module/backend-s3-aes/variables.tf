@@ -9,31 +9,58 @@ variable "aws_region" {
 
 // label
 
-variable "label_namespace" {
-  description = "A short (3-4 letters) abbreviation of the company name, to ensure globally unique IDs for things like S3 buckets"
+variable "label_full" {
+  description = "Optional override for the full resource label. If provided, this value will be used directly instead of composing the label from other parameters like namespace, name, stage, etc."
   type        = string
   default     = null
+  validation {
+    condition     = var.label_full != ""
+    error_message = "label_full must not be an empty string"
+  }
+}
+
+variable "label_namespace" {
+  description = "A short (3–4 letter) abbreviation of the company or team name, used to ensure globally unique names for resources like S3 buckets."
+  type        = string
+  default     = null
+  validation {
+    condition     = var.label_namespace != ""
+    error_message = "label_namespace must not be an empty string"
+  }
 }
 
 variable "label_region" {
-  description = "A short abbreviation for the AWS region hosting the resource, or gbl for resources like IAM roles that have no region"
+  description = "Short abbreviation for the AWS region hosting the resource, or 'gbl' for global resources like IAM roles."
   type        = string
   default     = null
+  validation {
+    condition     = var.label_region != ""
+    error_message = "label_region must not be an empty string"
+  }
 }
 
 variable "label_stage" {
-  description = "The name or role of the account the resource is for, such as dev, test, prod, security, identity."
+  description = "The deployment stage or environment the resource belongs to, such as dev, test, staging, prod, or shared (for shared, non-stage-specific infra like security or identity)."
   type        = string
   default     = null
+  validation {
+    condition     = var.label_stage != ""
+    error_message = "label_stage must not be an empty string"
+  }
 }
 
 variable "label_name" {
-  description = "The name of the component that owns the resource"
+  description = "The name of the application or component that owns this resource."
   type        = string
+  default     = null
+  validation {
+    condition     = var.label_name != ""
+    error_message = "label_name must not be an empty string"
+  }
 }
 
 variable "label_extras" {
-  description = "ID element. Additional attributes (e.g. `workers` or `cluster`) to add to `id`"
+  description = "Additional elements to include in the generated label (e.g., 'workers' or 'cluster')."
   type        = list(string)
   default     = []
 }
