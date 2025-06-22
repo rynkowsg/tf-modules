@@ -27,6 +27,9 @@ locals {
 
 resource "aws_iam_role_policy" "inline_policy" {
   for_each = { for idx, ip in local.inline_policies: "${ip["role_name"]}--${ip["inline_policy_name"]}" => ip }
+
+  depends_on = [aws_iam_role.role]
+
   role = each.value["role_name"]
   name = each.value["inline_policy_name"]
   policy = each.value["inline_policy_content"]
@@ -49,6 +52,9 @@ locals {
 
 resource "aws_iam_role_policy_attachment" "policy_attachment" {
   for_each   = { for idx, pa in local.policy_attachments: "${pa["role_name"]}--${basename(pa["arn"])}" => pa }
+
+  depends_on = [aws_iam_role.role]
+
   role       = each.value["role_name"]
   policy_arn = each.value["arn"]
 }
