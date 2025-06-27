@@ -2,11 +2,6 @@ variable "aws_account_id" {
   type = string
 }
 
-variable "aws_region" {
-  description = "The AWS region"
-  type        = string
-}
-
 // label
 
 variable "label_full" {
@@ -72,15 +67,19 @@ variable "tags" {
   default = {}
 }
 
-// S3 specific
+// bucket specific
+
+variable "bucket_policy" {
+  type    = string
+  default = null
+}
+
+variable "bucket_kms_key_policy" {
+  type    = string
+  default = null
+}
 
 variable "bucket_force_destroy" {
   type    = bool
   default = false
-}
-
-variable "admin_principal_arns" {
-  type        = list(string)
-  description = "List of IAM ARNs with access to KMS key"
-  default     = []
 }

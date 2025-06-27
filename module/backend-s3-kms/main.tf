@@ -57,36 +57,47 @@ resource "aws_s3_bucket_public_access_block" "terraform_state" {
   ignore_public_acls      = true
 }
 
+resource "aws_s3_bucket_policy" "terraform_state" {
+  for_each = var.bucket_policy != null ? { "provided" = true } : {}
+  bucket   = aws_s3_bucket.terraform_state.id
+  policy   =  var.bucket_policy
+}
+
 # ------------------------------------------------------------------------------
 # BUCKET ENCRYPTION
 # ------------------------------------------------------------------------------
 
 locals {
-  root_statement = {
-    Sid    = "AllowRootAccount"
-    Effect = "Allow"
-    Principal = {
-      AWS = "arn:aws:iam::${var.aws_account_id}:root"
-    }
-    Action   = "kms:*"
-    Resource = "*"
-  }
-  admin_statement = length(var.admin_principal_arns) > 0 ? {
-    Sid    = "AllowAdministratorsGroupViaRole"
-    Effect = "Allow"
-    Principal = {
-      AWS = var.admin_principal_arns
-    }
-    Action = [
-      "kms:Encrypt",
-      "kms:Decrypt",
-      "kms:ReEncrypt*",
-      "kms:GenerateDataKey*",
-      "kms:DescribeKey"
+  bucket_kms_key_policy_default = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid    = "AllowRootAccount"
+        Effect = "Allow"
+        Principal = {
+          AWS = "arn:aws:iam::${var.aws_account_id}:root"
+        }
+        Action   = "kms:*"
+        Resource = "*"
+      },
+      {
+        Sid    = "AllowAccessFromSameAccount"
+        Effect = "Allow"
+        Principal = {
+          AWS = "arn:aws:iam::${var.aws_account_id}:root"
+        }
+        Action = [
+          "kms:Encrypt",
+          "kms:Decrypt",
+          "kms:ReEncrypt*",
+          "kms:GenerateDataKey*",
+          "kms:DescribeKey"
+        ]
+        Resource = "*"
+      }
     ]
-    Resource = "*"
-  } : null
-  policy_statements = concat([local.root_statement], local.admin_statement != null ? [local.admin_statement] : [])
+  })
+  bucket_kms_key_policy_final = var.bucket_kms_key_policy != null ? var.bucket_kms_key_policy : local.bucket_kms_key_policy_default
 }
 
 resource "aws_kms_key" "terraform_state" {
@@ -95,11 +106,7 @@ resource "aws_kms_key" "terraform_state" {
   deletion_window_in_days = 30
   enable_key_rotation     = true
 
-  policy = jsonencode({
-    Version   = "2012-10-17",
-    Id        = "default",
-    Statement = local.policy_statements,
-  })
+  policy = local.bucket_kms_key_policy_final
 }
 
 resource "aws_kms_alias" "terraform_state" {
