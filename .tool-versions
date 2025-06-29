@@ -1,8 +1,8 @@
 # https://github.com/babashka/babashka/releases
-babashka 1.12.203
+babashka 1.12.204
 
 # https://github.com/bridgecrewio/checkov/releases
-checkov 3.2.442@3.13.5
+checkov 3.2.447
 
 # https://github.com/hashicorp/terraform/releases
 terraform 1.12.2

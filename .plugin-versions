@@ -1,4 +1,4 @@
 # plugin-name        git-url                                                    git-ref (hash, tag, or branch)
 babashka             https://github.com/pitch-io/asdf-babashka.git              3c26394
-checkov              https://github.com/rynkowsg/asdf-pyapp.git                 b92eb9f
+checkov              https://github.com/bosmak/asdf-checkov.git                 08104c7
 terraform            https://github.com/asdf-community/asdf-hashicorp.git       22eb1c4
