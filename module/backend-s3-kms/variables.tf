@@ -79,6 +79,11 @@ variable "bucket_kms_key_policy" {
   default = null
 }
 
+variable "bucket_key_enabled" {
+  type    = bool
+  default = true
+}
+
 variable "bucket_force_destroy" {
   type    = bool
   default = false
