@@ -9,7 +9,7 @@ output "kms_key" {
   value = {
     "arn" : aws_kms_key.terraform_state.arn,
     "id" : aws_kms_key.terraform_state.id,
-    "alias": aws_kms_alias.terraform_state.name,
-    "alias_arn": aws_kms_alias.terraform_state.arn,
+    "alias" : aws_kms_alias.terraform_state.name,
+    "alias_arn" : aws_kms_alias.terraform_state.arn,
   }
 }

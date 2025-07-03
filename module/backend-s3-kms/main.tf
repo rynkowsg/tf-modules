@@ -60,7 +60,7 @@ resource "aws_s3_bucket_public_access_block" "terraform_state" {
 resource "aws_s3_bucket_policy" "terraform_state" {
   for_each = var.bucket_policy != null ? { "provided" = true } : {}
   bucket   = aws_s3_bucket.terraform_state.id
-  policy   =  var.bucket_policy
+  policy   = var.bucket_policy
 }
 
 # ------------------------------------------------------------------------------
