@@ -1,7 +1,3 @@
-variable "aws_account_id" {
-  type = string
-}
-
 // label
 
 variable "label_full" {

@@ -75,7 +75,7 @@ locals {
         Sid    = "AllowRootAccount"
         Effect = "Allow"
         Principal = {
-          AWS = "arn:aws:iam::${var.aws_account_id}:root"
+          AWS = "arn:aws:iam::${local.current_account_id}:root"
         }
         Action   = "kms:*"
         Resource = "*"
@@ -84,7 +84,7 @@ locals {
         Sid    = "AllowAccessFromSameAccount"
         Effect = "Allow"
         Principal = {
-          AWS = "arn:aws:iam::${var.aws_account_id}:root"
+          AWS = "arn:aws:iam::${local.current_account_id}:root"
         }
         Action = [
           "kms:Encrypt",
