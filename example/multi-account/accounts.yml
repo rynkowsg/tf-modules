@@ -6,14 +6,16 @@
 #  SCHEMA
 # --------
 #
-# There are two types of accounts: "account" & "ou".
+# There are two types of entries: "account" and "ou".
 #
-# Properties of "account" type:
+# Properties for type "account":
+#  - key (optional; if omitted, 'name' is used as the key)
 #  - name
 #  - type
 #  - email
 #
-# Properties of "ou" type:
+# Properties for type "ou":
+#  - key (optional; if omitted, 'name' is used as the key)
 #  - name
 #  - type
 #  - children (optional)
